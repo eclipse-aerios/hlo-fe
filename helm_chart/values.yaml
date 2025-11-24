@@ -1,0 +1,30 @@
+image:
+  repository: eclipseaerios/local-fe-engine:v3.0.0
+  pullPolicy: Always
+
+replicas: 1
+
+selectorLabels:
+  app: hlo-frontend
+  comp: aeriOS-core
+  tier: hlo
+#hlo data aggregatpr service
+
+service:
+  type: ClusterIP
+  port: 8081
+  targetPort: 8000
+
+# Variables in src/app/config.py
+EnvVar:
+  #ngsi-ld
+  url: "http://orion-ld-broker.default.svc.cluster.local"
+  port: "1026"
+  #Redpanda
+  bootstrapServers: "redpanda-0.redpanda.redpanda.svc.cluster.local:9093"
+  groupId: "python-consumer"
+  autoOffsetReset: "earliest"
+  producerTopic: "fe2data"
+  #aeriOS-k8s-shim
+  k8sShimUrl: "http://aeriOS-k8s-shim-service.default.svc.cluster.local"
+  k8sShimPort: "8085"

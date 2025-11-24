@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "f253da2c-aad9-4f5d-bc99-e692f9b9447a",
+		"name": "HLO-FE-Engine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3206639",
+		"_collection_link": "https://restless-shuttle-809322.postman.co/workspace/aerOS-workspace~ac0c131e-f2d6-4574-b06d-d22fbcbd8fdc/collection/3206639-f253da2c-aad9-4f5d-bc99-e692f9b9447a?action=share&source=collection_link&creator=3206639"
+	},
+	"item": [
+		{
+			"name": "GET Service",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{access_url}}/hlo_fe/services/",
+					"protocol": "https",
+					"host": [
+						"{{access_url}}"
+					],
+					"path": [
+						"hlo_fe",
+						"services",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Allocate Service",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/yaml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "tosca_definitions_version: tosca_simple_yaml_1_3\n\ndescription:  TOSCA simple container application with ports and hosts requirements\n\nnode_templates:\n  simple_application:\n    type: tosca.nodes.Container.Application\n    requirements:\n      - host:\n          node_filter:\n            capabilities:\n               - host:\n                  properties:\n                    cpu_usage: { greater_or_equal: 0.3 }\n                    cpu_arch: { equal: x86_64 }  #data model supports : x86_64, arm64, arm32 \n                    mem_size: { greater_or_equal: 2000 MB } #MB used in the data model\n                    realtime: { equal: true }\n                    area:\n                      coordinates:\n                        - [-0.3411743020092746, 39.48103451588121]\n                        - [-0.3411743020092746, 39.4103451588121]\n                        - [-0.3411743020092746, 39.48103451588121]\n                        - [-0.3411743020092746, 39.48103451588121]\n\n      - network:\n          properties:\n            ports:\n              exposedport1:\n                properties:\n                  protocol: [udp]\n                  source: 1625\n              exposedport2:\n                properties:\n                  protocol: [udp, tcp]\n                  source: 35\n    artifacts:\n      application_image:\n        file: busybox\n        type: tosca.artifacts.Deployment.Image.Container.Docker\n        repository: docker_hub\n\n    interfaces:\n      Standard:\n        create:\n          implementation: application_image\n          inputs:\n            cliArgs:\n              - RTperiodicity: 123\n              - RTdeadline: 23\n            envVars:\n              - Var1: 22\n",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{access_url}}/services/{{service_id}}",
+					"host": [
+						"{{access_url}}"
+					],
+					"path": [
+						"services",
+						"{{service_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Service",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/yaml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "tosca_definitions_version: tosca_simple_yaml_1_3\n\ndescription:  TOSCA simple container application with ports and hosts requirements\n\nnode_templates:\n  simple_application:\n    type: tosca.nodes.Container.Application\n    requirements:\n      - host:\n          node_filter:\n            capabilities:\n               - host:\n                  properties:\n                    cpu_usage: { greater_or_equal: 0.3 }\n                    cpu_arch: { equal: x86_64 }  #data model supports : x86_64, arm64, arm32 \n                    mem_size: { greater_or_equal: 2000 MB } #MB used in the data model\n                    realtime: { equal: true }\n                    area:\n                      coordinates:\n                        - [-0.3411743020092746, 39.48103451588121]\n                        - [-0.3411743020092746, 39.4103451588121]\n                        - [-0.3411743020092746, 39.48103451588121]\n                        - [-0.3411743020092746, 39.48103451588121]\n\n      - network:\n          properties:\n            ports:\n              exposedport1:\n                properties:\n                  protocol: [udp]\n                  source: 1625\n              exposedport2:\n                properties:\n                  protocol: [udp, tcp]\n                  source: 35\n    artifacts:\n      application_image:\n        file: busybox\n        type: tosca.artifacts.Deployment.Image.Container.Docker\n        repository: docker_hub\n\n    interfaces:\n      Standard:\n        create:\n          implementation: application_image\n          inputs:\n            cliArgs:\n              - RTperiodicity: 123\n              - RTdeadline: 23\n            envVars:\n              - Var1: 22\n",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{access_url}}/services/{{service_id}}",
+					"host": [
+						"{{access_url}}"
+					],
+					"path": [
+						"services",
+						"{{service_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deallocate Service",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{access_url}}/services/{{service_id}}",
+					"host": [
+						"{{access_url}}"
+					],
+					"path": [
+						"services",
+						"{{service_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "service_id",
+			"value": "urn:ngsi-ld:service:1",
+			"type": "string"
+		},
+		{
+			"key": "service_component_id",
+			"value": "service_component_1",
+			"type": "string"
+		},
+		{
+			"key": "access_url",
+			"value": "https://ncsrd-mvp-domain.aeros-project.eu",
+			"type": "string"
+		},
+		{
+			"value": "",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}

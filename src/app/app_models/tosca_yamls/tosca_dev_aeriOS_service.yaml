@@ -1,0 +1,82 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+description:  TOSCA simple container application with with two service components ports and hosts requirements
+
+node_templates:
+  nginx_component:
+    type: tosca.nodes.Container.Application
+    requirements:
+      - host:
+          node_filter:
+            properties:
+              id: "urn:ngsi-ld:InfrastructureElement:ncsrd-w2"
+      - network:
+          properties:
+            ports:
+              nginx_port1:
+                properties:
+                  protocol: [tcp]
+                  source: 80
+              nginx_port2:
+                properties:
+                  protocol: [tcp]
+                  source: 443
+    artifacts:
+      nginx_component_image:
+        file: nginx:latest
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+        repository: docker_hub
+
+    interfaces:
+      Standard:
+        create:
+          implementation: nginx_component_image
+          inputs:
+            envVars:
+              - SOME_NGINX_ENV_VARIABLE: SOME_NGINX_ENV_VARIABLE_VALUE
+              - SOME_MORE_NGINX_ENV_VARIABLE: SOME_MORE_NGINX_ENV_VARIABLE_VALUE
+
+  nmosquitto_component:
+    type: tosca.nodes.Container.Application
+    requirements:
+      - host:
+          node_filter:
+            capabilities:
+               - host:
+                  properties:
+                    cpu_usage: { less_or_equal: 0.5 }
+                    cpu_arch: { equal: x86_64 }  #data model supports : x86_64, arm64, arm32 
+                    mem_size: { greater_or_equal: 4096 MB } #MB used in the data model
+                    realtime: { equal: false }
+                    area:
+                      coordinates:
+                        - [-0.3411743020092746, 39.48103451588121]
+                        - [-0.3411743020092746, 39.4103451588121]
+                        - [-0.3411743020092746, 39.48103451588121]
+                        - [-0.3411743020092746, 39.48103451588121]
+
+      - network:
+          properties:
+            ports:
+              mqtt_port1:
+                properties:
+                  protocol: [tcp]
+                  source: 1883
+              mqtt_port2:
+                properties:
+                  protocol: [tcp]
+                  source: 9883
+    artifacts:
+      mqtt_component_image:
+        file: eclipse-mosquitto:latest
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+        repository: docker_hub
+
+    interfaces:
+      Standard:
+        create:
+          implementation: mqtt_component_image
+          inputs:
+            envVars:
+              - SOME_MQTT_ENV_VARIABLE: SOME_MQTT_ENV_VARIABLE_VALUE
+              - SOME_MORE_MQTT_ENV_VARIABLE: SOME_MORE_MQTT_ENV_VARIABLE_VALUE

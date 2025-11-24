@@ -1,0 +1,86 @@
+
+
+description: This is a testing TOSCA composed of X nodes
+
+node_templates:
+  nginx:
+    artifacts:
+      application_image:
+        file: nginx
+        repository: registry.gitlab.aeriOS-project.eu
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs:
+            - -forwarding: ''
+            - -brokerId: CFDomain
+            envVars:
+            - BROKER_ID: CFDomain
+            - OTHER_ENV_VAR: another value
+    requirements:
+    - network:
+        properties:
+          ports:
+            port1:
+              protocol:
+              - tcp
+              source: 1026
+            port2:
+              properties:
+                protocol:
+                - tcp
+                source: 443
+    - host:
+        node_filter:
+          capabilities:
+          - host:
+              properties:
+                cpu_arch:
+                  equal: x86_64
+                realtime:
+                  equal: true
+                cpu_usage:
+                  greater_or_equal: 0.3
+                mem_size:
+                  greater_or_equal: 500 MB
+          properties: null
+    type: tosca.nodes.Container.Application
+  nginx2:
+    artifacts:
+      application_image:
+        file: nginx
+        repository: registry.gitlab.aeriOS-project.eu
+        type: tosca.artifacts.Deployment.Image.Container.Docker
+    interfaces:
+      Standard:
+        create:
+          implementation: application_image
+          inputs:
+            cliArgs:
+            - -forwarding: ''
+            - -brokerId: CFDomain
+            envVars:
+            - BROKER_ID: CFDomain
+            - OTHER_ENV_VAR: another value
+    requirements:
+    - network:
+        properties:
+          ports:
+            port1:
+              protocol:
+              - tcp
+              source: 1026
+            port2:
+              protocol:
+              - tcp
+              source: 443
+    - host:
+        node_filter:
+          capabilities: null
+          properties:
+            id: urn:ngsi-ld:InfrastructureElement:ncsrd-wl
+    type: tosca.nodes.Container.Application
+tosca_definitions_version: tosca_simple_yaml_1_3

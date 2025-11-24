@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+import "hlo.proto";
+
+message HLODataAggregatorOutput {
+    Service service = 1;
+}
