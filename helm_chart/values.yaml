@@ -1,5 +1,5 @@
 image:
-  repository: eclipseaerios/local-fe-engine:v3.0.0
+  repository: eclipseaerios/hlo-fe-engine:v3.0.0
   pullPolicy: Always
 
 replicas: 1
